@@ -1,17 +1,7 @@
-app:
-  security:
-    jwt:
-      authtype: Bearer
-      rtexpirationmins: 4320
-      atexpirationmins: 360
-      uri:
-
-    header: jjh
-    authentication:
-      type: DBBASED
-    key:
-      keytype: shared
-      signingsecret: fe80::6184:62f1:2b9e:5b8313:8666:1qaz
+secret: 5DE65619BA16C4ABBA1C794706E5F2281F7ED9109CBB287466209A8A6AC49E7A
+authtype: Bearer
+rtexpirationmins: 4320
+atexpirationmins: 360
 
 spring:
   mail:
