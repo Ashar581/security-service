@@ -1,7 +1,10 @@
 package com.security.service.Config;
 
+import com.security.service.Jwt.JwtTokenValidatorFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,6 +24,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 @CrossOrigin
 public class AppSecurityConfig {
+    @Autowired
+    JwtTokenValidatorFilter jwtTokenValidatorFilter;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.sessionManagement(session ->
@@ -40,8 +45,9 @@ public class AppSecurityConfig {
                         })
                 )
                 .authorizeRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.GET,"api/user/view").authenticated()
                         .anyRequest().permitAll())
-//                .addFilterAfter(jwtvalidator, BasicAuthenticationFilter.class)
+                .addFilterAfter(jwtTokenValidatorFilter, BasicAuthenticationFilter.class)
                 .httpBasic(withDefaults());
         return httpSecurity.build();
     }

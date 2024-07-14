@@ -1,16 +1,14 @@
 package com.security.service.Jwt;
 
 import com.security.service.Entity.User;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
@@ -20,13 +18,9 @@ import java.util.Map;
 
 @Data
 @Component
-public class JwtUtil {
-    @Value("${secret}")
-    private String secret;
-    @Value(("${rtexpirationmins}"))
-    private Long rtexpiration;
-    @Value(("${atexpirationmins}"))
-    private Long atexpiration;
+public class JwtTokenGenerator {
+@Autowired
+KeyConfig keyConfig;
 
     public String generateToken(User user){
         Map<String,Object> header = new HashMap<>();
@@ -41,16 +35,11 @@ public class JwtUtil {
                 .setId(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(LocalDateTime.now()
-                        .plusMinutes(rtexpiration)
+                        .plusMinutes(keyConfig.getRtexpiration())
                         .atZone(ZoneId.systemDefault()).toInstant()))
                 .claim("Allowed",allowed)
-                .signWith(getKey())
+                .signWith(keyConfig.getKey())
                 .compact();
-    }
-
-    private Key getKey(){
-        byte [] keyBytes = Decoders.BASE64.decode(secret);
-        return Keys.hmacShaKeyFor(keyBytes);
     }
 
 }

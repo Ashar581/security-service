@@ -4,7 +4,7 @@ import com.security.service.DTO.UserDto;
 import com.security.service.Entity.User;
 import com.security.service.Exceptions.IncorrectPasswordException;
 import com.security.service.Exceptions.UserNotFoundException;
-import com.security.service.Jwt.JwtUtil;
+import com.security.service.Jwt.JwtTokenGenerator;
 import com.security.service.Model.LoginRequest;
 import com.security.service.Model.LoginResponse;
 import com.security.service.Repository.UserRepo;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    JwtUtil jwtUtil;
+    JwtTokenGenerator jwtUtil;
 
     @Override
     public UserDto add(User user) throws UserNotFoundException {

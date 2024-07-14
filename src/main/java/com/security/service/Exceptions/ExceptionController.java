@@ -32,4 +32,13 @@ public class ExceptionController {
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler
+    public ResponseEntity<Map<String,Object>> tokenNotValidException(TokenNotValidException te){
+        Map<String,Object> response = new HashMap<>();
+        response.put("timespan",LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+        response.put("status",false);
+        response.put("message",te.getMessage());
+
+        return new ResponseEntity<>(response,HttpStatus.UNAUTHORIZED);
+    }
 }
