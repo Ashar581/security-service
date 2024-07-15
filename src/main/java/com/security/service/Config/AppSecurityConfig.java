@@ -45,7 +45,10 @@ public class AppSecurityConfig {
                         })
                 )
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET,"api/user/view").authenticated()
+//                        .requestMatchers(HttpMethod.GET,"api/user/view-all").authenticated()
+//                        .requestMatchers(HttpMethod.GET,"api/user/view").authenticated()
+                        .requestMatchers(HttpMethod.POST,"api/user/add").permitAll()
+                        .requestMatchers("api/user/**").authenticated()
                         .anyRequest().permitAll())
                 .addFilterAfter(jwtTokenValidatorFilter, BasicAuthenticationFilter.class)
                 .httpBasic(withDefaults());

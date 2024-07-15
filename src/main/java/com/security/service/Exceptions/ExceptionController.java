@@ -1,5 +1,6 @@
 package com.security.service.Exceptions;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -40,5 +41,14 @@ public class ExceptionController {
         response.put("message",te.getMessage());
 
         return new ResponseEntity<>(response,HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler
+    public ResponseEntity<Map<String,Object>> locationIdNotFoundException(LocationIdNotFoundException le){
+        Map<String,Object> response = new HashMap<>();
+        response.put("timespan",LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+        response.put("status",false);
+        response.put("message",le.getMessage());
+
+        return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
     }
 }

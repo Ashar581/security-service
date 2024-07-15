@@ -5,6 +5,9 @@ import com.security.service.ApiResponse.ApiUtils;
 import com.security.service.DTO.UserDto;
 import com.security.service.Entity.User;
 import com.security.service.Service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +19,29 @@ import java.util.List;
 public class UserController extends ApiUtils {
     @Autowired
     UserService userService;
-    @GetMapping("view")
+    @GetMapping("view-all")
     public ResponseEntity<ApiResponse<List<User>>> get(){
         return getApiResponse(userService.get(),"List of users");
     }
     @PostMapping("add")
     public ResponseEntity<ApiResponse<UserDto>> add(@RequestBody User user){
         return getApiResponse(userService.add(user),"User Added");
+    }
+    @GetMapping("view")
+    public ResponseEntity<ApiResponse<UserDto>> view(HttpServletRequest request){
+        UserDto dto = UserDto.entityToDto(userService.view(request.getAttribute("email").toString()));
+        return getApiResponse(dto,"User View");
+    }
+
+    @PutMapping("update")
+    public ResponseEntity<ApiResponse<UserDto>> update(@RequestBody UserDto userDto, HttpServletRequest request){
+        userDto.setEmail(request.getAttribute("email").toString());
+        return getApiResponse(userService.update(userDto),"User Updated");
+    }
+
+    @DeleteMapping("delete")
+    public ResponseEntity<ApiResponse<Void>> delete(HttpServletRequest request){
+        userService.delete(request.getAttribute("email").toString());
+        return getApiResponse(ResponseEntity.noContent().build(),"User Deleted");
     }
 }

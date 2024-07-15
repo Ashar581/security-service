@@ -26,6 +26,7 @@ public class UserDto {
     private Location location;
     private List<File> files;
     private Profile profile;
+    private List<String> allowedUsers;
     public static User dtoToEntity(UserDto dto){
         User user = new User();
         user.setFirstName(dto.getFirstName());
@@ -38,6 +39,7 @@ public class UserDto {
         user.setLocation(dto.getLocation());
         user.setFiles(dto.getFiles());
         user.setProfile(dto.getProfile());
+        user.setAllowedUsers(dto.getAllowedUsers());
         return user;
     }
     public static UserDto entityToDto(User user){
@@ -52,6 +54,7 @@ public class UserDto {
         dto.setLocation(user.getLocation());
         dto.setProfile(user.getProfile());
         dto.setFiles(user.getFiles());
+        dto.setAllowedUsers(user.getAllowedUsers());
 
         return dto;
     }

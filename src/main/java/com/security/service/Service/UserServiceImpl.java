@@ -1,6 +1,7 @@
 package com.security.service.Service;
 
 import com.security.service.DTO.UserDto;
+import com.security.service.Entity.Location;
 import com.security.service.Entity.User;
 import com.security.service.Exceptions.IncorrectPasswordException;
 import com.security.service.Exceptions.UserNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService{
         if(userRepo.existsByEmail(user.getEmail())) throw new UserNotFoundException("User Exists");
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setCreateTime(Instant.now());
+        user.setLocation(new Location());
         return UserDto.entityToDto(userRepo.save(user));
     }
 
@@ -53,5 +56,33 @@ public class UserServiceImpl implements UserService{
 
         response.setUserDto(UserDto.entityToDto(user));
         return response;
+    }
+
+    @Override
+    public UserDto update(UserDto dto) {
+        User user = userRepo.findByEmail(dto.getEmail())
+                .orElseThrow(()-> new UserNotFoundException("User Does Not Exits"));
+        Boolean update = false;
+        if (Objects.nonNull(dto.getFirstName())) user.setFirstName(dto.getFirstName());update = true;
+        if (Objects.nonNull(dto.getLastName())) user.setLastName(dto.getLastName());update = true;
+        if (Objects.nonNull(dto.getPhoneNumber())) user.setPhoneNumber(dto.getPhoneNumber());update = true;
+        if (Objects.nonNull(dto.getAllowedUsers())) user.setAllowedUsers(dto.getAllowedUsers());update = true;
+        if (update) user.setUpdateTime(Instant.now());
+        System.out.println("User Update: "+user.getPhoneNumber());
+
+        return UserDto.entityToDto(userRepo.save(user));
+    }
+
+    @Override
+    public User view(String email) throws UserNotFoundException{
+        return userRepo.findByEmail(email)
+                .orElseThrow(()->new UserNotFoundException("User Not Found"));
+    }
+
+    @Override
+    public void delete(String email) throws UserNotFoundException {
+        User user = userRepo.findByEmail(email)
+                        .orElseThrow(()->new UserNotFoundException("User Not Found"));
+        userRepo.delete(user);
     }
 }
