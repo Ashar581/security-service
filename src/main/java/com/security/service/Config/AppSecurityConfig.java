@@ -49,6 +49,7 @@ public class AppSecurityConfig {
 //                        .requestMatchers(HttpMethod.GET,"api/user/view").authenticated()
                         .requestMatchers(HttpMethod.POST,"api/user/add").permitAll()
                         .requestMatchers("api/user/**").authenticated()
+                        .requestMatchers("api/files/**").authenticated()
                         .anyRequest().permitAll())
                 .addFilterAfter(jwtTokenValidatorFilter, BasicAuthenticationFilter.class)
                 .httpBasic(withDefaults());

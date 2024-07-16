@@ -1,5 +1,6 @@
 package com.security.service.Exceptions;
 
+import org.apache.coyote.Response;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,5 +51,14 @@ public class ExceptionController {
         response.put("message",le.getMessage());
 
         return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler
+    public ResponseEntity<Map<String,Object>> fileException(FileExceptionHandler fe){
+        Map<String,Object> response = new HashMap<>();
+        response.put("timespan",LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+        response.put("status",false);
+        response.put("message",fe.getMessage());
+
+        return new ResponseEntity<>(response,HttpStatus.NOT_ACCEPTABLE);
     }
 }
