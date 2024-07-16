@@ -5,6 +5,7 @@ import com.security.service.ApiResponse.ApiUtils;
 import com.security.service.Model.LoginRequest;
 import com.security.service.Model.LoginResponse;
 import com.security.service.Service.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ public class AuthenticationController extends ApiUtils {
     @Autowired
     UserService userService;
     @PostMapping("signin")
-    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request){
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) throws MessagingException {
         return getApiResponse(userService.authenticate(request),"User Logged In Successfully");
     }
 }

@@ -7,8 +7,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: app@digitalsherpa.ai
-    password: 123edc#EDC
+    username: ashar.shahab@digitalsherpa.ai
+    password: Ashar@581
     properties:
       mail:
         smtp:

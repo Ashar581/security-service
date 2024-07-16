@@ -9,6 +9,7 @@ import com.security.service.Jwt.JwtTokenGenerator;
 import com.security.service.Model.LoginRequest;
 import com.security.service.Model.LoginResponse;
 import com.security.service.Repository.UserRepo;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,10 @@ import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService{
+    @Autowired
+    HtmlCreator creator;
+    @Autowired
+    MailService mailService;
     @Autowired
     UserRepo userRepo;
     @Autowired
@@ -41,7 +46,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public LoginResponse authenticate(LoginRequest request) throws UserNotFoundException, IncorrectPasswordException {
+    public LoginResponse authenticate(LoginRequest request) throws UserNotFoundException, IncorrectPasswordException, MessagingException {
         System.out.println("UserName: "+request.getUsername());
         User user = userRepo.findByEmail(request.getUsername())
                 .orElseThrow(()->new UserNotFoundException("User Not Found"));
@@ -55,6 +60,9 @@ public class UserServiceImpl implements UserService{
         response.setRefreshToken(token);
 
         response.setUserDto(UserDto.entityToDto(user));
+
+        mailService.sendHtmlEmail(request.getUsername(), "Account Was Logged In",creator.getHtml(user.getFirstName()));
+        
         return response;
     }
 
