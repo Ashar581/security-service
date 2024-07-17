@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -50,5 +49,12 @@ public class FileJavaImpl implements FileService{
         File file = fileRepo.findById(fileId)
                 .orElseThrow(()->new FileExceptionHandler("File Not Found"));
         return file;
+    }
+
+    @Override
+    public void delete(Long fileId) {
+        File file = fileRepo.findById(fileId)
+                .orElseThrow(()->new FileExceptionHandler("File Not Found"));
+        fileRepo.delete(file);
     }
 }

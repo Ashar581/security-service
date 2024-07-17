@@ -29,4 +29,10 @@ public class FileController extends ApiUtils {
     public ResponseEntity<ApiResponse<File>> viewById(@PathVariable("file-id")Long fileID){
         return getApiResponse(fileService.view(fileID),"View File");
     }
+
+    @DeleteMapping("delete/{file-id}")
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable("file-id")Long fileId){
+        fileService.delete(fileId);
+        return getApiResponse(ResponseEntity.noContent().build(),"File Deleted");
+    }
 }

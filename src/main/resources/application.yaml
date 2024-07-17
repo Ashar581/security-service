@@ -4,6 +4,10 @@ rtexpirationmins: 4320
 atexpirationmins: 360
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   mail:
     host: smtp.gmail.com
     port: 587
