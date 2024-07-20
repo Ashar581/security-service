@@ -30,7 +30,7 @@ public class User {
     private Instant createTime;
     private Instant updateTime;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "location_id")
     private Location location;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> files;

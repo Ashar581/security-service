@@ -27,7 +27,7 @@ KeyConfig keyConfig;
         header.put("t", Base64.getEncoder().encode(user.getEmail().getBytes(StandardCharsets.UTF_8)));
 
         Map<String,Object> allowed = new HashMap<>();
-        allowed.put("Guardian",user.getAllowedUsers());
+        allowed.put("view",user.getAllowedUsers());
 
         return Jwts.builder()
                 .setHeader(header)

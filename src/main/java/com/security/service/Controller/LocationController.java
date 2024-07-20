@@ -21,4 +21,10 @@ public class LocationController extends ApiUtils {
         locationService.addLiveLocation(request.getAttribute("email").toString(),location);
         return getApiResponse(location,"Live LocationResponse");
     }
+    @GetMapping("get-location")
+    public ResponseEntity<ApiResponse<LocationResponse>> getLocation(HttpServletRequest request){
+        //send the request, extract the token internally and get the allowed list.
+        System.out.println("Auth: "+request.getHeader("Authorization"));
+        return getApiResponse(locationService.getLiveLocation(request.getHeader("Authorization").trim().replace("Bearer ","")),"Live Location");
+    }
 }

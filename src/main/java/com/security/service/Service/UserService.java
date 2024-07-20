@@ -17,4 +17,5 @@ public interface UserService {
     User view(String email);
     @Transactional
     void delete(String email);
+    List<String> addWatchLive(UserDto userDto, String email);
 }

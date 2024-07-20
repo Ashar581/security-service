@@ -36,7 +36,9 @@ public class UserServiceImpl implements UserService{
         if(userRepo.existsByEmail(user.getEmail())) throw new UserNotFoundException("User Exists");
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setCreateTime(Instant.now());
-        user.setLocation(new Location());
+        if(user.getLocation()==null) {
+            user.setLocation(new Location());
+        }
         return UserDto.entityToDto(userRepo.save(user));
     }
 
@@ -92,5 +94,19 @@ public class UserServiceImpl implements UserService{
         User user = userRepo.findByEmail(email)
                         .orElseThrow(()->new UserNotFoundException("User Not Found"));
         userRepo.delete(user);
+    }
+
+    @Override
+    public List<String> addWatchLive(UserDto userDto, String email) throws UserNotFoundException {
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(()->new UserNotFoundException("User Not Found"));
+        //checking if the user I want to add has an account with us or not.
+        userRepo.findByEmail(userDto.getEmail())
+                .orElseThrow(()->new UserNotFoundException("Cannot Added User. Ask the user to create an account"));
+
+        List<String> addUser = user.getAllowedUsers();
+        addUser.add(userDto.getEmail());
+        userRepo.save(user);
+        return addUser;
     }
 }
