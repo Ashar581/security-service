@@ -25,13 +25,11 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
         if (Objects.nonNull(request.getHeader("Authorization"))) {
             try {
                 String token = request.getHeader("Authorization").replace("Bearer ", "").trim();
-                System.out.println("Token: " + token);
                 if (jwtTokenValidator.isTokenValid(token)) throw new TokenNotValidException("Token Expired");
                 //principal-useremail(id),credentials-user creds,authorities-role of the user.
                 Authentication authentication =
                         new UsernamePasswordAuthenticationToken(jwtTokenValidator.getUsername(token), null, new ArrayList<>());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                System.out.println("Authenticated? " + authentication.isAuthenticated());
                 request.setAttribute("email", jwtTokenValidator.getUsername(token));
             }catch (TokenNotValidException te){
                 throw new TokenNotValidException("Token Expired");

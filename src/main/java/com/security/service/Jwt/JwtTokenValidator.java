@@ -21,8 +21,6 @@ public class JwtTokenValidator {
         return (isTokenExpired(token));
     }
     private Boolean isTokenExpired(String token){
-        System.out.println("Expiration: "+getJws(token).getBody().getExpiration());
-        System.out.println(getJws(token).getBody().getExpiration().before(new Date()));
         return getJws(token).getBody().getExpiration().before(new Date());
     }
     public String getUsername(String token){
