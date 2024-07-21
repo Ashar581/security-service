@@ -29,6 +29,7 @@ public class User {
     private String password;
     private Instant createTime;
     private Instant updateTime;
+    private boolean isLive;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "location_id")
     private Location location;

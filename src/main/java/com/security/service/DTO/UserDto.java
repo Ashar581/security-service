@@ -22,6 +22,7 @@ public class UserDto {
     private String password;
     private Instant createTime;
     private Instant updateTime;
+    private boolean isLive;
     @JsonIgnore
     private Location location;
     private List<File> files;
@@ -40,6 +41,7 @@ public class UserDto {
         user.setFiles(dto.getFiles());
         user.setProfile(dto.getProfile());
         user.setAllowedUsers(dto.getAllowedUsers());
+        user.setLive(dto.isLive());
         return user;
     }
     public static UserDto entityToDto(User user){
@@ -55,6 +57,7 @@ public class UserDto {
         dto.setProfile(user.getProfile());
         dto.setFiles(user.getFiles());
         dto.setAllowedUsers(user.getAllowedUsers());
+        dto.setLive(user.isLive());
 
         return dto;
     }

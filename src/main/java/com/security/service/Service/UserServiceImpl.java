@@ -77,6 +77,7 @@ public class UserServiceImpl implements UserService{
         if (Objects.nonNull(dto.getLastName())) user.setLastName(dto.getLastName());update = true;
         if (Objects.nonNull(dto.getPhoneNumber())) user.setPhoneNumber(dto.getPhoneNumber());update = true;
         if (Objects.nonNull(dto.getAllowedUsers())) user.setAllowedUsers(dto.getAllowedUsers());update = true;
+        if (Objects.nonNull(dto.isLive())) user.setLive(dto.isLive());update = true;
         if (update) user.setUpdateTime(Instant.now());
         System.out.println("User Update: "+user.getPhoneNumber());
 
