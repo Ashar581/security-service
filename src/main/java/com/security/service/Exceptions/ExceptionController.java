@@ -61,4 +61,13 @@ public class ExceptionController {
 
         return new ResponseEntity<>(response,HttpStatus.NOT_ACCEPTABLE);
     }
+    @ExceptionHandler(ProfilePictureException.class)
+    public ResponseEntity<Map<String,Object>> profilePictureException(ProfilePictureException pe){
+        Map<String,Object> response = new HashMap<>();
+        response.put("timespan",LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+        response.put("status",false);
+        response.put("message",pe.getMessage());
+
+        return new ResponseEntity<>(response,HttpStatus.NOT_ACCEPTABLE);
+    }
 }
