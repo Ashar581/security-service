@@ -11,8 +11,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ashar.shahab@digitalsherpa.ai
-    password: Ashar@581
+    username: securellance@gmail.com
+    password: vtdcenrpfdadpwon
     properties:
       mail:
         smtp:
