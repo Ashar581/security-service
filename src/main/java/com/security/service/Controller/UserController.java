@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -56,5 +57,13 @@ public class UserController extends ApiUtils {
     @PostMapping("add-watch-live")
     public ResponseEntity<ApiResponse<List<String>>> addWatchLive(@RequestBody UserDto userDto, HttpServletRequest request){
         return getApiResponse(userService.addWatchLive(userDto,request.getAttribute("email").toString()),"List of users for live location monitoring");
+    }
+    @PutMapping("add-live-listeners")
+    public ResponseEntity<ApiResponse<List<String>>> addLiveListeners(HttpServletRequest request,@RequestBody UserDto dto){
+        return getApiResponse(userService.addLiveListeners(dto,request.getAttribute("email").toString()),"Live Listeners Added");
+    }
+    @GetMapping("email-search")
+    public ResponseEntity<ApiResponse<List<String>>> searchEmail(@RequestParam("query") String search){
+        return getApiResponse(userService.searchEmail(search),"Search List");
     }
 }

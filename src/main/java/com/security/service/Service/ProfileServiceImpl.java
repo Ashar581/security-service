@@ -9,6 +9,8 @@ import com.security.service.Repository.ProfileRepo;
 import com.security.service.Repository.UserRepo;
 import com.security.service.Util.ImageCompressionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +25,7 @@ public class ProfileServiceImpl implements ProfileService{
     @Autowired
     ImageCompressionUtil imageCompressionUtil;
     @Override
+    @CacheEvict(value = "profilePictureCache", allEntries = true)
     public Boolean addProfilePicture(MultipartFile profilePic, String email) throws UserNotFoundException, ProfilePictureException {
         //add profile to user, if doesn't exist else update.
         User user = userRepo.findByEmail(email)
@@ -34,7 +37,6 @@ public class ProfileServiceImpl implements ProfileService{
             user.setProfile(profile);
         }
         try {
-//            imageCompressionUtil.compressImage(profilePic);
             profile.setProfileName(profilePic.getOriginalFilename());
             profile.setProfileType(profilePic.getContentType());
             profile.setData(imageCompressionUtil.compressImage(profilePic));
@@ -48,6 +50,7 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
+    @CacheEvict(value = "profilePictureCache", allEntries = true)
     public Boolean remove(String email) throws UserNotFoundException, ProfilePictureException {
         User user = userRepo.findByEmail(email)
                 .orElseThrow(()->new UserNotFoundException("User Not Found"));
@@ -58,6 +61,7 @@ public class ProfileServiceImpl implements ProfileService{
         return true;
     }
     @Override
+    @Cacheable("profilePictureCache")
     public Profile view(String email) throws UserNotFoundException,ProfilePictureException {
         User user = userRepo.findByEmail(email)
                 .orElseThrow(()->new UserNotFoundException("User Not Found"));

@@ -8,6 +8,7 @@ import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
     UserDto add(User user);
@@ -17,5 +18,8 @@ public interface UserService {
     User view(String email);
     @Transactional
     void delete(String email);
-    List<String> addWatchLive(UserDto userDto, String email);
+    Set<String> addWatchLive(UserDto userDto, String email);
+    @Transactional
+    Set<String> addLiveListeners(UserDto dto, String email);
+    List<String> searchEmail(String search);
 }

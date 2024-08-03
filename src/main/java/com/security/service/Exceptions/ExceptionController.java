@@ -70,4 +70,13 @@ public class ExceptionController {
 
         return new ResponseEntity<>(response,HttpStatus.NOT_ACCEPTABLE);
     }
+    @ExceptionHandler(CannotBeNullException.class)
+    public ResponseEntity<Map<String,Object>> cannotBeNulException(CannotBeNullException cne){
+        Map<String,Object> response = new HashMap<>();
+        response.put("timespan",LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+        response.put("status",false);
+        response.put("message",cne.getMessage());
+
+        return new ResponseEntity<>(response,HttpStatus.NOT_ACCEPTABLE);
+    }
 }

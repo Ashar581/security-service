@@ -3,6 +3,7 @@ package com.security.service.Service;
 import com.security.service.DTO.UserDto;
 import com.security.service.Entity.Location;
 import com.security.service.Entity.User;
+import com.security.service.Exceptions.CannotBeNullException;
 import com.security.service.Exceptions.IncorrectPasswordException;
 import com.security.service.Exceptions.UserNotFoundException;
 import com.security.service.Jwt.JwtTokenGenerator;
@@ -15,8 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -49,8 +49,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public LoginResponse authenticate(LoginRequest request) throws UserNotFoundException, IncorrectPasswordException, MessagingException {
-        System.out.println("UserName: "+request.getUsername());
-        User user = userRepo.findByEmail(request.getUsername())
+        User user = userRepo.findByEmail(request.getUsername().toLowerCase())
                 .orElseThrow(()->new UserNotFoundException("User Not Found"));
         if (!bCryptPasswordEncoder.matches(request.getPassword(),user.getPassword()))
             throw new IncorrectPasswordException("Incorrect Password");
@@ -98,16 +97,33 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<String> addWatchLive(UserDto userDto, String email) throws UserNotFoundException {
+    public Set<String> addWatchLive(UserDto userDto, String email) throws UserNotFoundException {
         User user = userRepo.findByEmail(email)
                 .orElseThrow(()->new UserNotFoundException("User Not Found"));
         //checking if the user I want to add has an account with us or not.
         userRepo.findByEmail(userDto.getEmail())
                 .orElseThrow(()->new UserNotFoundException("Cannot Added User. Ask the user to create an account"));
 
-        List<String> addUser = user.getAllowedUsers();
+        Set<String> addUser = user.getAllowedUsers();
         addUser.add(userDto.getEmail());
         userRepo.save(user);
         return addUser;
+    }
+    @Override
+    public Set<String> addLiveListeners(UserDto dto, String email) throws UserNotFoundException, CannotBeNullException {
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(()->new UserNotFoundException("User Not Found"));
+        if (dto.getAllowedUsers()!=null && !dto.getAllowedUsers().isEmpty()){
+            if (user.getAllowedUsers()==null) user.setAllowedUsers(new HashSet<>());
+            user.getAllowedUsers().addAll(dto.getAllowedUsers());
+            userRepo.save(user);
+        }
+        else throw new CannotBeNullException("You cannot add null values");
+        return user.getAllowedUsers();
+    }
+
+    @Override
+    public List<String> searchEmail(String search) {
+        return userRepo.searchByEmail(search);
     }
 }

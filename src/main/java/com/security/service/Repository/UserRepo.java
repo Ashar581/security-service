@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -13,4 +14,6 @@ public interface UserRepo extends JpaRepository<User,Long> {
     Optional<User> findByEmail(@Param("email") String email);
     @Query(value = "SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END FROM Users u WHERE u.email = :email",nativeQuery = true)
     Boolean existsByEmail(@Param("email") String email);
+    @Query(value = "SELECT u.email FROM users u WHERE u.email LIKE %:search% LIMIT 3", nativeQuery = true)
+    List<String> searchByEmail(@Param("search") String search);
 }

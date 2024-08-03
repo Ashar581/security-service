@@ -10,6 +10,7 @@ import lombok.Data;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -27,7 +28,7 @@ public class UserDto {
     private Location location;
     private List<File> files;
     private Profile profile;
-    private List<String> allowedUsers;
+    private Set<String> allowedUsers;
     public static User dtoToEntity(UserDto dto){
         User user = new User();
         user.setFirstName(dto.getFirstName());

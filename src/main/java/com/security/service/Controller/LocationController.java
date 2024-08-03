@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class LocationController extends ApiUtils {
     @Autowired
     LocationService locationService;
-    @PutMapping("get-live")
+    @PutMapping("send-live")
     public ResponseEntity<ApiResponse<LocationResponse>> getLiveLocation(@RequestBody LocationResponse location, HttpServletRequest request){
         locationService.addLiveLocation(request.getAttribute("email").toString(),location);
         return getApiResponse(location,"Live LocationResponse");
