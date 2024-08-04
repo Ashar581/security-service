@@ -25,4 +25,6 @@ public interface UserService {
     List<String> searchEmail(String search);
     @Transactional
     SOS addSos(UserDto dto, String email);
+    @Transactional
+    SOS initateSOS(String email);
 }

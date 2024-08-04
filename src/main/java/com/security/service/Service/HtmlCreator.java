@@ -64,4 +64,35 @@ public class HtmlCreator {
                 "</body>\n" +
                 "</html>\n";
     }
+    public String sendSOS(String name, String receiverName, Double longitude, Double latitude){
+        // Set the actual HTML message
+        return  "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "    <meta charset=\"UTF-8\">" +
+                "    <title>Emergency Notification</title>" +
+                "    <style>" +
+                "        body { font-family: Arial, sans-serif; margin: 20px; }" +
+                "        .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f9f9; }" +
+                "        .header { background-color: #ff4d4d; color: white; padding: 10px; text-align: center; border-radius: 10px 10px 0 0; }" +
+                "        .map { width: 100%; height: auto; margin: 20px 0; }" +
+                "    </style>" +
+                "</head>" +
+                "<body>" +
+                "    <div class=\"container\">" +
+                "        <div class=\"header\">" +
+                "            <h2>Emergency Notification</h2>" +
+                "        </div>" +
+                "        <p>Dear "+receiverName+",</p>" +
+                "        <p>This is an emergency notification. Please find the current location below:</p>" +
+                "        <div>" +
+                "            <img class=\"map\" src=\"https://static-maps.yandex.ru/1.x/?lang=en-US&ll=" + longitude + "," + latitude + "&size=600,300&z=15&l=map&pt=" + longitude + "," + latitude + ",pm2rdm\" alt=\"Current Location\">" +
+                "        </div>" +
+                "        <p>Thank you for your immediate attention to this matter.</p>" +
+                "        <p>Best regards,</p>" +
+                "        <p>"+name+"</p>" +
+                "    </div>" +
+                "</body>" +
+                "</html>";
+    }
 }

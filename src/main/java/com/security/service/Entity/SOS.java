@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.Set;
 
 @Data
@@ -21,6 +22,7 @@ public class SOS {
     private Long sosId;
     private Set<String> sosContacts;
     private String sosMessage;
+    private Instant sosInitiatedAt;
     @JsonBackReference
     @OneToOne(mappedBy = "sosContact")
     private User user;

@@ -147,4 +147,20 @@ public class UserServiceImpl implements UserService{
         else throw new CannotBeNullException("You cannot add empty value");
         return userRepo.save(user).getSosContact();
     }
+
+    //loop through the sosConacts and send them the email of current location.
+    @Override
+    public SOS initateSOS(String email) throws UserNotFoundException{
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(()->new UserNotFoundException("User Not Found"));
+
+        try {
+            mailService.sendHtmlEmail("asharshahab@gmail.com","It is an emergency!",
+                    creator.sendSOS(user.getFirstName(),"Ashar",user.getLocation().getLongitude(),user.getLocation().getLatitude()));
+            user.getSosContact().setSosInitiatedAt(Instant.now());
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+        return userRepo.save(user).getSosContact();
+    }
 }

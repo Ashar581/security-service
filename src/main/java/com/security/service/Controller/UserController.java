@@ -78,4 +78,9 @@ public class UserController extends ApiUtils {
     public ResponseEntity<ApiResponse<SOS>> addSos(HttpServletRequest request, @RequestBody UserDto dto){
         return getApiResponse(userService.addSos(dto,request.getAttribute("email").toString()),"SOS was added");
     }
+    //for sos initiation
+    @PutMapping("initiate-sos")
+    public ResponseEntity<ApiResponse<SOS>> initiateSOS(HttpServletRequest request){
+        return getApiResponse(userService.initateSOS(request.getAttribute("email").toString()),"SOS was initiated successfully");
+    }
 }
