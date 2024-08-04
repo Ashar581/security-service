@@ -2,6 +2,7 @@ package com.security.service.Controller;
 
 import com.security.service.ApiResponse.ApiResponse;
 import com.security.service.ApiResponse.ApiUtils;
+import com.security.service.DTO.UserDto;
 import com.security.service.Jwt.JwtTokenGenerator;
 import com.security.service.Model.LocationResponse;
 import com.security.service.Service.LocationService;
@@ -24,5 +25,9 @@ public class LocationController extends ApiUtils {
     public ResponseEntity<ApiResponse<LocationResponse>> getLocation(HttpServletRequest request){
         //send the request, extract the token internally and get the allowed list.
         return getApiResponse(locationService.getLiveLocation(request.getHeader("Authorization").trim().replace("Bearer ","")),"Live Location");
+    }
+    @GetMapping("send-sos-live")
+    public ResponseEntity<ApiResponse<LocationResponse>> sendLiveLocation(HttpServletRequest request){
+        return getApiResponse(locationService.sendLiveLocation(request.getAttribute("email").toString()),"Emergency Live Location");
     }
 }

@@ -31,6 +31,7 @@ public class UserDto {
     private Set<String> allowedUsers;
     private Set<String> sosContacts;
     private String sosMessage;
+    private String sosLocation;
     public static User dtoToEntity(UserDto dto){
         User user = new User();
         user.setFirstName(dto.getFirstName());

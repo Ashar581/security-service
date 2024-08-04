@@ -54,7 +54,8 @@ public class LocationServiceImpl implements LocationService{
         //Logic for getting list of location of allowed users.
         List<LocationResponse> locationList = new ArrayList<>();
         for (String email:allowedUserView){
-            User user = userRepo.findByEmail(email).get();
+            User user = userRepo.findByEmail(email)
+                    .orElse(null);
             if (Objects.nonNull(user) && Objects.nonNull(user.getLocation())) {
                 LocationResponse location = new LocationResponse();
                 location.setLongitude(user.getLocation().getLongitude());
@@ -66,5 +67,19 @@ public class LocationServiceImpl implements LocationService{
             }
         }
         return locationList;
+    }
+
+    @Override
+    public LocationResponse sendLiveLocation(String email) throws UserNotFoundException, LocationIdNotFoundException{
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(()->new UserNotFoundException("User Not Found"));
+        if (user.getLocation()==null) throw new LocationIdNotFoundException("There was no live location registered");
+        LocationResponse response = new LocationResponse();
+        response.setEmail(email);
+        response.setName(user.getFirstName());
+        response.setLatitude(user.getLocation().getLatitude());
+        response.setLongitude(user.getLocation().getLongitude());
+
+        return response;
     }
 }

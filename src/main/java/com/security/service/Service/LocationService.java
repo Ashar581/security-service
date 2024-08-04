@@ -11,4 +11,6 @@ public interface LocationService {
     Location addLiveLocation(String email, LocationResponse location);
 
     List<LocationResponse> getLiveLocation(String token);
+
+    LocationResponse sendLiveLocation(String email);
 }

@@ -64,7 +64,7 @@ public class HtmlCreator {
                 "</body>\n" +
                 "</html>\n";
     }
-    public String sendSOS(String name, String receiverName, Double longitude, Double latitude){
+    public String sendSOS(String name, String receiverName, Double longitude, Double latitude, String sosLocation){
         // Set the actual HTML message
         return  "<!DOCTYPE html>" +
                 "<html>" +
@@ -83,14 +83,15 @@ public class HtmlCreator {
                 "        <div class=\"header\">" +
                 "            <h2>Emergency Notification</h2>" +
                 "        </div>" +
-                "        <p>Dear "+receiverName+",</p>" +
+                "        <p>Dear " + receiverName + ",</p>" +
                 "        <p>This is an emergency notification. Please find the current location below:</p>" +
+                "        <p>Please find my live location from this link: <a href=\"" + sosLocation + "\">click here</a></p>" +
                 "        <div>" +
                 "            <img class=\"map\" src=\"https://static-maps.yandex.ru/1.x/?lang=en-US&ll=" + longitude + "," + latitude + "&size=600,300&z=15&l=map&pt=" + longitude + "," + latitude + ",pm2rdm\" alt=\"Current Location\">" +
                 "        </div>" +
                 "        <p>Thank you for your immediate attention to this matter.</p>" +
                 "        <p>Best regards,</p>" +
-                "        <p>"+name+"</p>" +
+                "        <p>" + name + "</p>" +
                 "    </div>" +
                 "</body>" +
                 "</html>";

@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService{
         if(userRepo.existsByEmail(user.getEmail())) throw new UserNotFoundException("User Exists");
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setCreateTime(Instant.now());
+        user.setLive(false);
         if(user.getLocation()==null) {
             user.setLocation(new Location());
         }
@@ -60,7 +61,6 @@ public class UserServiceImpl implements UserService{
         String token = jwtUtil.generateToken(user);
         response.setToken(token);
         response.setRefreshToken(token);
-
         response.setUserDto(UserDto.entityToDto(user));
 
         mailService.sendHtmlEmail(request.getUsername(), "Account Was Logged In",creator.getHtml(user.getFirstName()));
@@ -150,13 +150,19 @@ public class UserServiceImpl implements UserService{
 
     //loop through the sosConacts and send them the email of current location.
     @Override
-    public SOS initateSOS(String email) throws UserNotFoundException{
+    public SOS initateSOS(String email, String sosLocation) throws UserNotFoundException, CannotBeNullException{
         User user = userRepo.findByEmail(email)
                 .orElseThrow(()->new UserNotFoundException("User Not Found"));
-
+        if (user.getSosContact()==null || user.getSosContact().getSosContacts().isEmpty()) throw new CannotBeNullException("Please add sos contacts");
+        user.setLive(true);
         try {
-            mailService.sendHtmlEmail("asharshahab@gmail.com","It is an emergency!",
-                    creator.sendSOS(user.getFirstName(),"Ashar",user.getLocation().getLongitude(),user.getLocation().getLatitude()));
+            //sending to the
+            mailService.sendHtmlEmail("asharshahab@gmail.com", "It is an emergency!",
+                    creator.sendSOS(user.getFirstName(), "Ashar", user.getLocation().getLongitude(), user.getLocation().getLatitude(),sosLocation));
+            for (String sendingEmailTo : user.getSosContact().getSosContacts()) {
+                mailService.sendHtmlEmail(sendingEmailTo, "It is an emergency!",
+                        creator.sendSOS(user.getFirstName(), sendingEmailTo, user.getLocation().getLongitude(), user.getLocation().getLatitude(),sosLocation));
+            }
             user.getSosContact().setSosInitiatedAt(Instant.now());
         } catch (MessagingException e) {
             throw new RuntimeException(e);
