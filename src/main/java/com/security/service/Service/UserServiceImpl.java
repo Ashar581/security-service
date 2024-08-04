@@ -2,6 +2,7 @@ package com.security.service.Service;
 
 import com.security.service.DTO.UserDto;
 import com.security.service.Entity.Location;
+import com.security.service.Entity.SOS;
 import com.security.service.Entity.User;
 import com.security.service.Exceptions.CannotBeNullException;
 import com.security.service.Exceptions.IncorrectPasswordException;
@@ -125,5 +126,25 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<String> searchEmail(String search) {
         return userRepo.searchByEmail(search);
+    }
+
+    @Override
+    public SOS addSos(UserDto dto, String email) throws UserNotFoundException,CannotBeNullException {
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(()->new UserNotFoundException("User Not Found"));
+        if (dto.getSosContacts()!=null && !dto.getSosContacts().isEmpty()){
+            if (user.getSosContact()==null){
+                SOS createSos = new SOS();
+                if (dto.getSosMessage()==null || dto.getSosMessage()=="") createSos.setSosMessage("Please Help Me! I am in a danger. Here is my Live Location.");
+                createSos.setSosContacts(dto.getSosContacts());
+                user.setSosContact(createSos);
+            }
+            else {
+                if (dto.getSosMessage()!=null || dto.getSosMessage()=="") user.getSosContact().setSosMessage(dto.getSosMessage());
+                user.getSosContact().getSosContacts().addAll(dto.getSosContacts());
+            }
+        }
+        else throw new CannotBeNullException("You cannot add empty value");
+        return userRepo.save(user).getSosContact();
     }
 }

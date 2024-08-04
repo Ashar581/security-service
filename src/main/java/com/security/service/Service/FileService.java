@@ -12,4 +12,5 @@ public interface FileService {
     File view(Long fileId);
     @Transactional
     void delete(Long fileId);
+    List<String> search(String search);
 }

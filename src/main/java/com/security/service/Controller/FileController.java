@@ -35,4 +35,8 @@ public class FileController extends ApiUtils {
         fileService.delete(fileId);
         return getApiResponse(ResponseEntity.noContent().build(),"File Deleted");
     }
+    @GetMapping("search")
+    public ResponseEntity<ApiResponse<List<String>>> search(@RequestParam("search")String search){
+        return getApiResponse(fileService.search(search),"Search Result");
+    }
 }

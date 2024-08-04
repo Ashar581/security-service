@@ -63,4 +63,9 @@ public class FileJavaImpl implements FileService{
                 .orElseThrow(()->new FileExceptionHandler("File Not Found"));
         fileRepo.delete(file);
     }
+
+    @Override
+    public List<String> search(String search) {
+        return fileRepo.search(search);
+    }
 }

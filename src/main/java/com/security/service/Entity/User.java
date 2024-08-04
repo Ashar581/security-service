@@ -1,6 +1,5 @@
 package com.security.service.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -40,5 +39,8 @@ public class User {
     @JoinColumn(name = "profile_id")
     private Profile profile;
     private Set<String> allowedUsers;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "sos_id")
+    private SOS sosContact;
 
 }

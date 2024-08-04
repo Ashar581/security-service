@@ -29,6 +29,8 @@ public class UserDto {
     private List<File> files;
     private Profile profile;
     private Set<String> allowedUsers;
+    private Set<String> sosContacts;
+    private String sosMessage;
     public static User dtoToEntity(UserDto dto){
         User user = new User();
         user.setFirstName(dto.getFirstName());
