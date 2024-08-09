@@ -27,4 +27,5 @@ public interface UserService {
     SOS addSos(UserDto dto, String email);
     @Transactional
     SOS initateSOS(String email, String sosLocation);
+    List<String> viewContacts(String email, String type);
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -168,5 +169,36 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException(e);
         }
         return userRepo.save(user).getSosContact();
+    }
+
+    @Override
+    public List<String> viewContacts(String email,String type) throws UserNotFoundException{
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(()-> new UserNotFoundException("User Not Found"));
+        List<String> contacts = new ArrayList<>();
+        if (type==null) {
+            if (user.getSosContact() != null) {
+                contacts.addAll(user.getSosContact().getSosContacts());
+            }
+            if (user.getAllowedUsers() != null || !user.getAllowedUsers().isEmpty()) {
+                contacts.addAll(user.getAllowedUsers());
+            }
+            return contacts.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
+        else if (type.equalsIgnoreCase("sos")){
+            if (user.getSosContact() != null) {
+                contacts.addAll(user.getSosContact().getSosContacts());
+            }
+            return contacts;
+        }
+        else if (type.equalsIgnoreCase("live")){
+            if (user.getAllowedUsers() != null || !user.getAllowedUsers().isEmpty()) {
+                contacts.addAll(user.getAllowedUsers());
+            }
+        }
+
+        return null;
     }
 }

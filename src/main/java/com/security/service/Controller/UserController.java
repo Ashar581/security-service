@@ -83,4 +83,9 @@ public class UserController extends ApiUtils {
     public ResponseEntity<ApiResponse<SOS>> initiateSOS(HttpServletRequest request, @RequestBody UserDto dto){
         return getApiResponse(userService.initateSOS(request.getAttribute("email").toString(),dto.getSosLocation()),"SOS was initiated successfully");
     }
+    @GetMapping("view-contacts")
+    public ResponseEntity<ApiResponse<List<String>>> viewContacts(HttpServletRequest request,
+                                                                  @RequestParam(required = false)String type){
+        return getApiResponse(userService.viewContacts(request.getAttribute("email").toString(),type),"All Contacts Viewed");
+    }
 }
