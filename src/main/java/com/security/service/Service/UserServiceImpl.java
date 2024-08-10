@@ -127,6 +127,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<String> searchEmail(String search) {
+        if (search!=null && !search.isEmpty()) search = search.toLowerCase();
         return userRepo.searchByEmail(search);
     }
 
