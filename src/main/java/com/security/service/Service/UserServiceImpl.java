@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService{
         User user = userRepo.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("User Not Found"));
         List<String> contacts = new ArrayList<>();
-        if (type==null || type.isEmpty()) {
+        if (type==null) {
             if (user.getSosContact() != null) {
                 contacts.addAll(user.getSosContact().getSosContacts());
             }
@@ -199,6 +199,7 @@ public class UserServiceImpl implements UserService{
             if (user.getAllowedUsers() != null || !user.getAllowedUsers().isEmpty()) {
                 contacts.addAll(user.getAllowedUsers());
             }
+            return contacts;
         }
         return null;
     }
