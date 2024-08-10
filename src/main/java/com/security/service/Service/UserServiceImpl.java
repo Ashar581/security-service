@@ -201,4 +201,60 @@ public class UserServiceImpl implements UserService{
 
         return null;
     }
+    //not using this function anymore
+    @Override
+    public List<String> searchList(String email,String query, String type) throws UserNotFoundException{
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(()->new UserNotFoundException("User Not Found"));
+        //logic for search query
+        List<String> searchContact = new ArrayList<>();
+        if (type==null || type.isEmpty()){
+            if (user.getSosContact()!=null){
+                searchContact.addAll(user.getSosContact().getSosContacts());
+            }
+            if (user.getAllowedUsers()!=null){
+                searchContact.addAll(user.getAllowedUsers());
+            }
+            //returning the best match
+            return searchContact.stream()
+                    .filter(contact -> contact.contains(query) || hasPartialMatch(contact,query))
+                    .sorted(Comparator.comparingInt(contact -> matchScore(contact,query)))
+                    .collect(Collectors.toList());
+        }
+        if (type.equalsIgnoreCase("live")){
+            searchContact.addAll(user.getAllowedUsers());
+            return searchContact.stream()
+                    .filter(contact -> contact.contains(query) || hasPartialMatch(contact,query))
+                    .sorted(Comparator.comparingInt(contact -> matchScore(contact,query)))
+                    .collect(Collectors.toList());
+        }
+        if (type.equalsIgnoreCase("sos")){
+            searchContact.addAll(user.getSosContact().getSosContacts());
+            return searchContact.stream()
+                    .filter(contact -> contact.contains(query) || hasPartialMatch(contact,query))
+                    .sorted(Comparator.comparingInt(contact -> matchScore(contact,query)))
+                    .collect(Collectors.toList());
+        }
+        return null;
+    }
+    //search engine logic
+    //helper function to get the match as boolean
+    private boolean hasPartialMatch(String str, String search){
+        int searchIndex = 0;
+        for (char c:str.toCharArray()){
+            if (c==search.charAt(searchIndex)){
+                searchIndex++;
+                if(searchIndex==search.length()) return true;
+            }
+        }
+        return false;
+    }
+    //helper function to generate the match score 0->best match,1->good match,2->partial match,3->no match
+    //will be using it for comparing the results and sorting them accordingly
+    private int matchScore(String str, String search){
+        if (str.startsWith(search)) return 0;
+        else if (str.contains(search)) return 1;
+        else if (hasPartialMatch(str,str)) return 2;
+        else return 3;
+    }
 }

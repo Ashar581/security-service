@@ -88,4 +88,10 @@ public class UserController extends ApiUtils {
                                                                   @RequestParam(required = false)String type){
         return getApiResponse(userService.viewContacts(request.getAttribute("email").toString(),type),"All Contacts Viewed");
     }
+    @GetMapping("search-contact")
+    public ResponseEntity<ApiResponse<List<String>>> searchContacts(HttpServletRequest request,
+                                                                    @RequestParam("query")String query,
+                                                                    @RequestParam(value = "type",required = false)String type){
+        return getApiResponse(userService.searchList(request.getAttribute("email").toString(),query,type),"Search Results");
+    }
 }
