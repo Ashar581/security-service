@@ -13,6 +13,7 @@ import com.security.service.Model.LoginResponse;
 import com.security.service.Repository.UserRepo;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -171,6 +172,7 @@ public class UserServiceImpl implements UserService{
         return userRepo.save(user).getSosContact();
     }
 
+    @Cacheable(value = "viewContactsCache")
     @Override
     public List<String> viewContacts(String email,String type) throws UserNotFoundException{
         User user = userRepo.findByEmail(email)
@@ -198,7 +200,6 @@ public class UserServiceImpl implements UserService{
                 contacts.addAll(user.getAllowedUsers());
             }
         }
-
         return null;
     }
     //not using this function anymore
