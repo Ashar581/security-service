@@ -23,9 +23,9 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:postgresql://security_hg1k_user.dpg-cq8okgbv2p9s73aq64k0-a.oregon-postgres.render.com/security_hg1k
-    username: security_hg1k_user
-    password: XXtOT5Q33yhRWrNFiaDlAElGKAMxLJ9n
+    url: jdbc:postgresql://dpg-cqt4g8l6l47c739kcvng-a.oregon-postgres.render.com:5432/esd_security
+    username: esd_security_user
+    password: LRmXH6IiOI0OYpuD8rz4kMZAkNmL88Ci
     hikari:
       minimumIdle: 0
       maximumPoolSize: 3
