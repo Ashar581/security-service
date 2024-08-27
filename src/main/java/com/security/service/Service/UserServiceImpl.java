@@ -43,6 +43,8 @@ public class UserServiceImpl implements UserService{
         if(user.getLocation()==null) {
             user.setLocation(new Location());
         }
+        user.setAllowedUsers(new HashSet<>());
+        user.getAllowedUsers().add(user.getEmail());
         return UserDto.entityToDto(userRepo.save(user));
     }
 
