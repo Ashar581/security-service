@@ -117,6 +117,7 @@ public class UserServiceImpl implements UserService{
         return addUser;
     }
     @Override
+    @CacheEvict(value = "viewContactsCache", allEntries = true)
     public Set<String> addLiveListeners(UserDto dto, String email) throws UserNotFoundException, CannotBeNullException {
         User user = userRepo.findByEmail(email)
                 .orElseThrow(()->new UserNotFoundException("User Not Found"));
@@ -177,8 +178,8 @@ public class UserServiceImpl implements UserService{
         return userRepo.save(user).getSosContact();
     }
 
-    @Cacheable(value = "viewContactsCache")
     @Override
+    @Cacheable(value = "viewContactsCache")
     public List<String> viewContacts(String email,String type) throws UserNotFoundException{
         User user = userRepo.findByEmail(email)
                 .orElseThrow(()-> new UserNotFoundException("User Not Found"));
