@@ -144,6 +144,7 @@ public class UserServiceImpl implements UserService{
             }
             else {
                 if (dto.getSosMessage()!=null || dto.getSosMessage()=="") user.getSosContact().setSosMessage(dto.getSosMessage());
+                //
                 user.getSosContact().getSosContacts().addAll(dto.getSosContacts());
             }
         }
