@@ -13,6 +13,7 @@ import com.security.service.Model.LoginResponse;
 import com.security.service.Repository.UserRepo;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -102,6 +103,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @CacheEvict(value = "viewContactsCache", allEntries = true)
     public Set<String> addWatchLive(UserDto userDto, String email) throws UserNotFoundException {
         User user = userRepo.findByEmail(email)
                 .orElseThrow(()->new UserNotFoundException("User Not Found"));
