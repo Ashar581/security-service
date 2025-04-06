@@ -27,9 +27,9 @@ spring:
 #    username: esd_security_user
 #    password: LRmXH6IiOI0OYpuD8rz4kMZAkNmL88Ci
 #    postgresql://securellence_db_user:YMOrn73hsv0lNw4mkUg82pPwb7uoTtIe@dpg-cu02rlhopnds73e046a0-a.oregon-postgres.render.com/securellence_db
-    url: jdbc:postgresql://dpg-cu02rlhopnds73e046a0-a.oregon-postgres.render.com/securellence_db
-    username: securellence_db_user
-    password: YMOrn73hsv0lNw4mkUg82pPwb7uoTtIe
+    url: jdbc:postgresql://dpg-cvpbkemuk2gs739ho3g0-a.oregon-postgres.render.com/securellence
+    username: securellence_user
+    password: Vit3I4Z6Iv8EtIjzXO7RnkzWoyhPusE1
     hikari:
       minimumIdle: 0
       maximumPoolSize: 3
